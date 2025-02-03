@@ -1,6 +1,6 @@
 import unittest
 
-from src.blocks import markdown_to_blocks
+from src.blocks import markdown_to_blocks, md_block_to_block_type
 
 
 class TestHTMLNode(unittest.TestCase):
@@ -62,6 +62,32 @@ This is the same paragraph on a new line
                 "* This is a list\n* with items",
             ],
         )
+
+
+class TestBlockToBlockType(unittest.TestCase):
+    def test_heading(self):
+        self.assertEqual(md_block_to_block_type("# Heading"), "heading")
+        self.assertEqual(md_block_to_block_type("###### Small Heading"), "heading")
+
+    def test_code_block(self):
+        self.assertEqual(md_block_to_block_type("```\ncode\n```"), "code")
+
+    def test_quote_block(self):
+        self.assertEqual(md_block_to_block_type("> Quote\n> Another line"), "quote")
+
+    def test_unordered_list(self):
+        self.assertEqual(md_block_to_block_type("- Item 1\n- Item 2"), "unordered_list")
+        self.assertEqual(md_block_to_block_type("* Item 1\n* Item 2"), "unordered_list")
+
+    def test_ordered_list(self):
+        self.assertEqual(md_block_to_block_type("1. First\n2. Second\n3. Third"), "ordered_list")
+
+    def test_paragraph(self):
+        self.assertEqual(md_block_to_block_type("This is a normal paragraph."), "paragraph")
+
+    def test_mixed_content(self):
+        self.assertEqual(md_block_to_block_type("1. First\n3. Incorrect"), "paragraph")
+        self.assertEqual(md_block_to_block_type("> Quote\nNormal text"), "paragraph")
 
 
 if __name__ == "__main__":

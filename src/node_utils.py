@@ -1,4 +1,5 @@
 import re
+import os
 from textnode import TextNode, TextType
 
 
