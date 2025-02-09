@@ -1,5 +1,7 @@
 import shutil
 
+from blocks import generate_page
+
 
 def copy_file_to_public_dir():
     # delete all content from public dir
@@ -10,6 +12,8 @@ def copy_file_to_public_dir():
 
 def main():
     copy_file_to_public_dir()
+    # generate a html page from template and md file
+    generate_page("./content/index.md", "./template.html", "./public/index.html")
 
 
 if __name__ == "__main__":

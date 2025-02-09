@@ -1,6 +1,6 @@
 import unittest
 
-from src.blocks import markdown_to_blocks, md_block_to_block_type
+from src.blocks import extract_title, markdown_to_blocks, md_block_to_block_type
 
 
 class TestHTMLNode(unittest.TestCase):
@@ -88,6 +88,15 @@ class TestBlockToBlockType(unittest.TestCase):
     def test_mixed_content(self):
         self.assertEqual(md_block_to_block_type("1. First\n3. Incorrect"), "paragraph")
         self.assertEqual(md_block_to_block_type("> Quote\nNormal text"), "paragraph")
+
+
+class TestExtractTitle(unittest.TestCase):
+    def test_extract_valid_title(self):
+        self.assertEqual(extract_title("# Title text\n\n* one point"), "Title text")
+
+    def test_extract_invalid_title(self):
+        with self.assertRaises(Exception):
+            extract_title("### Not a valid first heading")
 
 
 if __name__ == "__main__":

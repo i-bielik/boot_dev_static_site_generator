@@ -1,9 +1,36 @@
 import os
 import re
 
-from src.htmlnode import ParentNode
-from src.node_utils import text_to_textnodes
-from src.textnode import text_node_to_html_node
+from htmlnode import ParentNode
+from node_utils import text_to_textnodes
+from textnode import text_node_to_html_node
+
+
+def generate_page(from_path, template_path, dest_path):
+    print(f"Generating page from {from_path} to {dest_path} using {template_path}")
+
+    with open(from_path, "r") as md_file:
+        md = md_file.read()
+
+    title = extract_title(md)
+    md_to_html = markdown_to_html_node(md).to_html()
+
+    with open(template_path, "r") as tmplt:
+        html_template = tmplt.read()
+
+    new_html = html_template.format(Title=title, Content=md_to_html)
+
+    os.makedirs(os.path.dirname(dest_path), exist_ok=True)
+    with open(dest_path, "w") as dest_file:
+        dest_file.write(new_html)
+
+
+def extract_title(text):
+    for line in text.split(os.linesep):
+        if re.search(r"^#{1} \S", line):
+            return line.replace("# ", "").strip()
+
+    raise Exception("No heading 1 provided in given text")
 
 
 def markdown_to_blocks(text):
