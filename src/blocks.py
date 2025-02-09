@@ -1,9 +1,22 @@
 import os
+from pathlib import Path
 import re
 
 from htmlnode import ParentNode
 from node_utils import text_to_textnodes
 from textnode import text_node_to_html_node
+
+
+def generate_pages_recursive(dir_path_content, template_path, dest_dir_path):
+    source_dir = Path(dir_path_content)
+    md_files = source_dir.glob("**/*.md")
+
+    for md in md_files:
+        parts = list(md.parts)
+        p_from = str(md)
+        parts[0] = dest_dir_path
+        to_path = "/".join(parts).replace(".md", ".html")
+        generate_page(p_from, template_path, to_path)
 
 
 def generate_page(from_path, template_path, dest_path):

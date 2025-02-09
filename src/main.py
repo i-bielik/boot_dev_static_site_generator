@@ -1,6 +1,6 @@
 import shutil
 
-from blocks import generate_page
+from blocks import generate_page, generate_pages_recursive
 
 
 def copy_file_to_public_dir():
@@ -13,7 +13,7 @@ def copy_file_to_public_dir():
 def main():
     copy_file_to_public_dir()
     # generate a html page from template and md file
-    generate_page("./content/index.md", "./template.html", "./public/index.html")
+    generate_pages_recursive("content", "./template.html", "public")
 
 
 if __name__ == "__main__":
